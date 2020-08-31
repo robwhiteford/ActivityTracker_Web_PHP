@@ -22,40 +22,101 @@
         exit();
     }
 
+    // Declare variables for data insert
     $activityDate = date('Y-m-d');
-
+    $weight = "";
+    $stepCount = "";
+    $distance = "";
+    $totalTime = "";
+    $averagePace = "";
+    $maximumPace = "";
+    $averageCadance = "";
+    $maximumCadance = "";
+    $averageStride = "";
+    $averageSpeed = "";
+    $calories = "";
+    $averageHeartRate = "";
+    $maximumHeartRate = "";
+    $minimumHeartRate = "";
+ 
     if (isset($_POST['Submit'])) 
     {
-        phpAlert("Is Submit");
-        $submitType = $_POST["SubmitType"];
-        if($submitType=="Search")
-        {
-            $func = 'Search';
-
-
-
-            if(isset($_POST["ddlTesterName"]))  
-            { 
-                $testerName = $_POST["ddlTesterName"];
-            }
-            
-            if(isset($_POST["ddlCustomerName"]))  
-            { 
-                $customerTested = $_POST["ddlCustomerName"];
-            }
-
-            if(isset($_POST["ddlModuleTested"]))  
-            { 
-                $moduleTested = $_POST["ddlModuleTested"];
-            }
-
-            if(isset($_POST["ddlResult"]))  
-            { 
-                $testResult = $_POST["ddlResult"];
-            }
-            $dateFrom = $_POST["DateFrom"];
-            $dateTo = $_POST["DateTo"];
+        if(isset($_POST["ActivityDate"]))  
+        { 
+            $activityDate = $_POST["ActivityDate"];
         }
+        if(isset($_POST["Weight"]))  
+        { 
+            $weight = $_POST["Weight"];
+        }
+        if(isset($_POST["StepCount"]))  
+        { 
+            $stepCount = $_POST["StepCount"];
+        }
+        if(isset($_POST["Distance"]))  
+        { 
+            $distance = $_POST["Distance"];
+        }
+        if(isset($_POST["TotalTime"]))  
+        { 
+            $totalTime = $_POST["TotalTime"];
+        }
+        if(isset($_POST["AveragePace"]))  
+        { 
+            $averagePace = $_POST["AveragePace"];
+        } 
+        if(isset($_POST["MaximumPace"]))  
+        { 
+            $maximumPace = $_POST["MaximumPace"];
+        } 
+        if(isset($_POST["AverageCadance"]))  
+        { 
+            $averageCadance = $_POST["AverageCadance"];
+        } 
+        if(isset($_POST["MaximumCadance"]))  
+        { 
+            $maximumCadance = $_POST["MaximumCadance"];
+        }   
+        if(isset($_POST["AverageStride"]))  
+        { 
+            $averageStride = $_POST["AverageStride"];
+        }  
+        if(isset($_POST["AverageSpeed"]))  
+        { 
+            $averageSpeed = $_POST["AverageSpeed"];
+        }  
+        if(isset($_POST["Calories"]))  
+        { 
+            $calories = $_POST["Calories"];
+        }     
+        if(isset($_POST["AverageHeartRate"]))  
+        { 
+            $averageHeartRate = $_POST["AverageHeartRate"];
+        }  
+        if(isset($_POST["MaximumHeartRate"]))  
+        { 
+            $maximumHeartRate = $_POST["MaximumHeartRate"];
+        } 
+        if(isset($_POST["MinimumHeartRate"]))  
+        { 
+            $minimumHeartRate = $_POST["MinimumHeartRate"];
+        }  
+        
+        $sqli = " INSERT INTO `activity_statistics`(`Date`, `Weight`, `StepCount`, `Distance`, `TotalTime`, `AveragePace`, `MaxPace`, 
+                `AverageCadance`, `MaxCadance`, `AverageStride`, `AverageSpeed`, `TotalCalories`, `AverageHeartRate`, `MaxHeartRate`, `MinHeartRate`) 
+                VALUES ('{$activityDate}','{$weight}','{$stepCount}','{$distance}','{$totalTime}','{$averagePace}','{$maximumPace}','{$averageCadance}',
+                    '{$maximumCadance}','{$averageStride}','{$averageSpeed}','{$calories}','{$averageHeartRate}','{$maximumHeartRate}','{$minimumHeartRate}')";
+
+
+        if (mysqli_query($connection, $sqli)) 
+        {
+            phpAlert("Record saved successfully");
+        }
+        else
+        {
+            phpAlert("Error: " . $sqli . "" . mysqli_error($connection));
+        }         
+
     }
 
     
@@ -69,17 +130,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- CSS only -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
-        
-
-
+       
         <!-- JS, Popper.js, and jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    
         <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
         <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
@@ -297,8 +354,8 @@
     
     </head>  
     <body>
-      <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Expand at xl</a>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">My Activities</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample06" aria-controls="navbarsExample06" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -325,7 +382,7 @@
 
     <form id="form" name="form" onsubmit="return ValidateForm();" method="POST">
         <div class="container" style="width:100%">
-                <div class= "row">
+                <div >
                     <table class="table" >
                         <tr>
                         <tr>
@@ -370,7 +427,7 @@
                     <tr>
                         <td>
                             <label>Maximum Pace </label><br>
-                            <input id="MaximumPace" name="MaxPace" placeholder="00.00">
+                            <input id="MaximumPace" name="MaximumPace" placeholder="00.00">
                         </td>
                         <td>
                             <label>Average Cadance</label><br>
@@ -378,7 +435,7 @@
                         </td>
                         <td>
                             <label>Maximum Cadance</label><br>
-                            <input id="MaximumCadance" name="MaxCadance" placeholder="00">
+                            <input id="MaximumCadance" name="MaximumCadance" placeholder="00">
                         </td>                            
                     </tr> 
                     <tr>
