@@ -10,11 +10,7 @@
 
     // Check if session exists
     session_start();
-    if (isset($_SESSION["LoginUser"]))
-    {
-        //$_SESSION["LoginUser"] = $_POST["username"];
-    }
-    else
+    if (!isset($_SESSION["LoginUser"]))
     {
         // Not logged in redirect to login page
         header("Location: login.php", true, 301);

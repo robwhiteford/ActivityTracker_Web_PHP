@@ -1,26 +1,22 @@
 <?php
-    // Get the database connection
-    //session_cache_limiter('private_no_expire'); // work
 
-
+    // Utility function to show alert from php
     function phpAlert($msg) {
         echo '<script type="text/javascript">alert("' . $msg . '")</script>';
     }
 
+    // Create database connection
     require 'db_connect.php';
 
     // Check if session exists
     session_start();
-    if (isset($_SESSION["LoginUser"]))
-    {
-        //$_SESSION["LoginUser"] = $_POST["username"];
-    }
-    else
+    if (!isset($_SESSION["LoginUser"]))
     {
         // Not logged in redirect to login page
         header("Location: login.php", true, 301);
         exit();
     }
+
 
     // Declare variables for data insert
     $activityDate = date('Y-m-d');
@@ -116,16 +112,16 @@
         {
             phpAlert("Error: " . $sqli . "" . mysqli_error($connection));
         }         
-
     }
-
+    // Close database connection
+    require 'db_disconnect.php';
     
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>List of Statistics</title>
+        <title>Add New activity</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- CSS only -->

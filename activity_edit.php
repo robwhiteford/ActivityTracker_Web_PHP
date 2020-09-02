@@ -10,16 +10,13 @@
 
     // Check if session exists
     session_start();
-    if (isset($_SESSION["LoginUser"]))
-    {
-        //$_SESSION["LoginUser"] = $_POST["username"];
-    }
-    else
+    if (!isset($_SESSION["LoginUser"]))
     {
         // Not logged in redirect to login page
         header("Location: login.php", true, 301);
         exit();
     }
+
 
     // Declare variables for data insert
     $statId = "";
@@ -160,7 +157,8 @@
         {
             phpAlert("Error: " . $sqli . "" . mysqli_error($connection));
         }         
-
+        // Close database connection
+        require 'db_disconnect.php';
     }
 
     
@@ -169,7 +167,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>List of Statistics</title>
+        <title>Edit Activity</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- CSS only -->
