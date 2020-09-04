@@ -65,34 +65,6 @@
                 } );
             } );
         </script>     
-
-        <script>
-         function SubmitDelete(statId)
-        {
-            // POST back to same page to avoid values in URL
-            var f = document.createElement('form');
-            f.action='activity_list.php';
-            f.method='POST';
-            f.target='_self';
-            var i=document.createElement('input');
-            i.type='hidden';
-            i.name='StatId';
-            i.value=statId;
-            f.appendChild(i);
-            i=document.createElement('input');
-            i.type='hidden';
-            i.name='DateFrom';
-            i.value=document.getElementById("DateFrom").value;
-            f.appendChild(i);
-            i=document.createElement('input');
-            i.type='hidden';
-            i.name='DateTo';
-            i.value=document.getElementById("DateTo").value;
-            f.appendChild(i);
-            document.body.appendChild(f);
-            f.submit();
-        }
-        </script>   
     </head>  
     <body>
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -129,7 +101,7 @@
                     <table class="table" >
                         <tr>
                             <td colspan="2" style="text-align: center">
-                                <h1>Average Pace versus Maximum Pace</h1>
+                                <h1>Activities completed with 30 minutes</h1>
                             </td>
                         </tr>
                     </table>
@@ -167,7 +139,7 @@
                 }
                 // Build up the criteria string
                 $criteria = " WHERE Date BETWEEN '" . $dateFrom . "' AND '" . $dateTo . "' ";
-                $sqli = "SELECT * FROM robwhzru_stats.activity_statistics " . $criteria . " order by Date asc";
+                $sqli = "SELECT SUM(If(TotalTime > '00:30:00', 1, 0)) as Outside, Sum(If(TotalTime < '00:30:00', 1, 0)) as Inside FROM `activity_statistics` " . $criteria;
 
                 try 
                 {
@@ -176,7 +148,8 @@
                     $entry = '';
                     while ($row = mysqli_fetch_array($result)) 
                     {
-                        $entry .= "['".$row{'Date'}."', ".$row{'AveragePace'}.", ".$row{'MaxPace'}."],";
+                        $entry .= "['Less than 30 minutes', ".$row{'Inside'}."],";
+                        $entry .= "['More than 30 minutes', ".$row{'Outside'}."]";
                     }
                 } catch (Exception $e) {
                     echo 'Caught exception: ',  $e->getMessage(), "\n";
@@ -186,35 +159,25 @@
                     //echo "<div class=\"row\">"; 
                     //echo "<div class=\"col-md-12\" style=\"background-color:white\"> ";
                     echo "<div class=\"container\" style=\"width:100%\">";
-                    echo "<div id=\"columnchart_values\" style=\"width: 1000px; margin:5px; justify-content: center; height:550px;\"></div>";
+                    echo "<div id=\"pie_chart\" style=\"width: 1000px; margin:5px; justify-content: center; height:550px;\"></div>";
                     echo " <script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>
                         <script type=\"text/javascript\">
 
-                        google.charts.load('current', {packages:['corechart']});
+                        google.charts.load('current', {'packages':['corechart']});
                         google.charts.setOnLoadCallback(drawChart);
                   
                         function drawChart() {
+                  
                           var data = google.visualization.arrayToDataTable([
-                            ['Date', 'AveragePace', 'MaximumPace'],
+                            ['Time', 'Number of Activities'],
                             $entry
                           ]);
                   
                           var options = {
-                            chart: {
-                              title: 'Company Performance',
-                              subtitle: 'Sales, Expenses, and Profit: 2014-2017',
-                            },
-                            hAxis: {
-                                slantedText:true,
-                                slantedTextAngle:90,
-                                title: 'Date'
-                            },
-                            vAxis: {
-                                title: 'minutes per Km'
-                              }
+                            title: 'Activities completed with 30 minutes'
                           };
                   
-                          var chart = new google.visualization.ColumnChart(document.getElementById('columnchart_values'));
+                          var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
                   
                           chart.draw(data, options);
                         }
@@ -233,9 +196,9 @@
                 <table id="activityTable" class="display" style="width:100%">
                     <thead>
                         <tr>
-                        <th>Date</th>
-                        <th style="text-align:center">Average Pace</th>
-                        <th style="text-align:center">Maximum Pace</th>
+                        <th>Completed</th>
+                        <th style="text-align:center">Less than 30 minutes</th>
+                        <th style="text-align:center">More than 30 minutes</th>
                     </tr>
                     <tbody>
                     <?php
@@ -244,8 +207,7 @@
                             $result = mysqli_query($connection, $sqli);
                             while ($row = mysqli_fetch_array($result)) 
                             {
-                                $tempString = '';
-                                echo "<tr><td>".$row["Date"]."</td><td style=\"text-align:center\">".$row["AveragePace"]."</td><td style=\"text-align:center\">".$row["MaxPace"]."</td></tr>";
+                                echo "<tr><td>Within 30 minutes?</td><td style=\"text-align:center\">".$row["Inside"]."</td><td style=\"text-align:center\">".$row["Outside"]."</td></tr>";
                             }
                         } catch (Exception $e) {
                             echo 'Caught exception: ',  $e->getMessage(), "\n";

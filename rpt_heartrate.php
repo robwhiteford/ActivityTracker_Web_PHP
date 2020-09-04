@@ -65,34 +65,6 @@
                 } );
             } );
         </script>     
-
-        <script>
-         function SubmitDelete(statId)
-        {
-            // POST back to same page to avoid values in URL
-            var f = document.createElement('form');
-            f.action='activity_list.php';
-            f.method='POST';
-            f.target='_self';
-            var i=document.createElement('input');
-            i.type='hidden';
-            i.name='StatId';
-            i.value=statId;
-            f.appendChild(i);
-            i=document.createElement('input');
-            i.type='hidden';
-            i.name='DateFrom';
-            i.value=document.getElementById("DateFrom").value;
-            f.appendChild(i);
-            i=document.createElement('input');
-            i.type='hidden';
-            i.name='DateTo';
-            i.value=document.getElementById("DateTo").value;
-            f.appendChild(i);
-            document.body.appendChild(f);
-            f.submit();
-        }
-        </script>   
     </head>  
     <body>
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -129,7 +101,7 @@
                     <table class="table" >
                         <tr>
                             <td colspan="2" style="text-align: center">
-                                <h1>Average Pace versus Maximum Pace</h1>
+                                <h1>Average/Maximum/Minimum Heart Rates</h1>
                             </td>
                         </tr>
                     </table>
@@ -176,7 +148,7 @@
                     $entry = '';
                     while ($row = mysqli_fetch_array($result)) 
                     {
-                        $entry .= "['".$row{'Date'}."', ".$row{'AveragePace'}.", ".$row{'MaxPace'}."],";
+                        $entry .= "['".$row{'Date'}."', ".$row{'AverageHeartRate'}.", ".$row{'MaxHeartRate'}.", ".$row{'MinHeartRate'}."],";
                     }
                 } catch (Exception $e) {
                     echo 'Caught exception: ',  $e->getMessage(), "\n";
@@ -186,37 +158,35 @@
                     //echo "<div class=\"row\">"; 
                     //echo "<div class=\"col-md-12\" style=\"background-color:white\"> ";
                     echo "<div class=\"container\" style=\"width:100%\">";
-                    echo "<div id=\"columnchart_values\" style=\"width: 1000px; margin:5px; justify-content: center; height:550px;\"></div>";
+                    echo "<div id=\"curve_chart\" style=\"width: 1000px; margin:5px; justify-content: center; height:550px;\"></div>";
                     echo " <script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>
                         <script type=\"text/javascript\">
 
-                        google.charts.load('current', {packages:['corechart']});
+                        google.charts.load('current', {'packages':['corechart']});
                         google.charts.setOnLoadCallback(drawChart);
-                  
+                    
                         function drawChart() {
-                          var data = google.visualization.arrayToDataTable([
-                            ['Date', 'AveragePace', 'MaximumPace'],
-                            $entry
-                          ]);
-                  
-                          var options = {
-                            chart: {
-                              title: 'Company Performance',
-                              subtitle: 'Sales, Expenses, and Profit: 2014-2017',
-                            },
+                            var data = google.visualization.arrayToDataTable([
+                            ['Date', 'Average Heart Rate', 'Maximum Heart Rate', 'Minimum Heart Rate'],
+                                $entry
+                            ]);
+                    
+                            var options = {
+                            title: 'Average/Maximum/Minimum Heart Rates',
+                            //curveType: 'function',
+                            legend: { position: 'right' },
                             hAxis: {
                                 slantedText:true,
                                 slantedTextAngle:90,
                                 title: 'Date'
                             },
                             vAxis: {
-                                title: 'minutes per Km'
+                                title: 'BPM'
                               }
-                          };
-                  
-                          var chart = new google.visualization.ColumnChart(document.getElementById('columnchart_values'));
-                  
-                          chart.draw(data, options);
+                            };
+                    
+                            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+                            chart.draw(data, options);
                         }
 
                         </script>";
@@ -234,8 +204,9 @@
                     <thead>
                         <tr>
                         <th>Date</th>
-                        <th style="text-align:center">Average Pace</th>
-                        <th style="text-align:center">Maximum Pace</th>
+                        <th style="text-align:center">Average Heart Rate</th>
+                        <th style="text-align:center">Maximum Heart Rate</th>
+                        <th style="text-align:center">Minimum Heart Rate</th>
                     </tr>
                     <tbody>
                     <?php
@@ -245,7 +216,7 @@
                             while ($row = mysqli_fetch_array($result)) 
                             {
                                 $tempString = '';
-                                echo "<tr><td>".$row["Date"]."</td><td style=\"text-align:center\">".$row["AveragePace"]."</td><td style=\"text-align:center\">".$row["MaxPace"]."</td></tr>";
+                                echo "<tr><td>".$row["Date"]."</td><td style=\"text-align:center\">".$row["AverageHeartRate"]."</td><td style=\"text-align:center\">".$row["MaxHeartRate"]."</td></td><td style=\"text-align:center\">".$row["MinHeartRate"]."</td></tr>";
                             }
                         } catch (Exception $e) {
                             echo 'Caught exception: ',  $e->getMessage(), "\n";
