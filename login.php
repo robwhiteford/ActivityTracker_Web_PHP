@@ -1,5 +1,6 @@
 <?php
-
+    session_start();
+    
     // Utility function to show alert from php
     function phpAlert($msg) {
         echo '<script type="text/javascript">alert("' . $msg . '")</script>';
@@ -8,11 +9,6 @@
     // Create database connection
     require 'db_connect.php';
 
-    // Check if session exists then destroy it
-    //session_start();
-    //session_unset();
-    //session_destroy();
-
     if (isset($_POST["username"]))
     {
         $sql = "Select * from robwhzru_stats.login where Username='". $_POST["username"] . "' and Password ='" .  $_POST["password"]  . "'"; 
@@ -20,7 +16,6 @@
         $user = mysqli_fetch_array($result);
         if ($user)
         {
-                session_start();
                 $_SESSION["LoginUser"] = $_POST["username"];
                 $message = "Successful Login";
                 header("Location: activity_list.php", true, 301);
