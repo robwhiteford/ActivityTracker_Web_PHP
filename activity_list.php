@@ -1,5 +1,5 @@
 <?php
-
+    session_start();
     // Utility function to show alert from php
     function phpAlert($msg) {
         echo '<script type="text/javascript">alert("' . $msg . '")</script>';
@@ -8,8 +8,6 @@
     // Create database connection
     require 'db_connect.php';
 
-    // Check if session exists
-    session_start();
     if (!isset($_SESSION["LoginUser"]))
     {
         // Not logged in redirect to login page
@@ -45,7 +43,6 @@
         <!-- CSS only -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
-        <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css"> -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
         
         <!-- JS, Popper.js, and jQuery -->
@@ -59,7 +56,7 @@
 
         <script>
             $(document).ready(function() {
-                $('#example').DataTable( {
+                $('#activityTable').DataTable( {
                     "order": [[ 0, "desc" ]],
                     searching: false, 
                     paging: true, 
@@ -113,11 +110,14 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown06" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Reports</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown06">
-                        <a class="dropdown-item" href="#">Report 1</a>
-                        <a class="dropdown-item" href="#">Report 2</a>
-                        <a class="dropdown-item" href="#">Report 3</a>
+                        <a class="dropdown-item" href="rpt_averagepace.php">Average/Maximum Pace</a>
+                        <a class="dropdown-item" href="rpt_heartrate.php">Heart Rates</a>
+                        <a class="dropdown-item" href="rpt_within30min.php">Within 30 minutes</a>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Logout </a>
+                </li>                
                 </ul>
             </div>
         </nav>
@@ -158,7 +158,7 @@
             </div>
 
             <div class="container" style="width:100%">
-                <table id="example" class="display" style="width:100%">
+                <table id="activityTable" class="display" style="width:100%">
                     <thead>
                         <tr>
                             <th>Date</th>

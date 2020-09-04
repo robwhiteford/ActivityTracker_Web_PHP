@@ -1,5 +1,6 @@
 <?php
-
+    session_start();
+    
     // Utility function to show alert from php
     function phpAlert($msg) {
         echo '<script type="text/javascript">alert("' . $msg . '")</script>';
@@ -8,8 +9,6 @@
     // Create database connection
     require 'db_connect.php';
 
-    // Check if session exists
-    session_start();
     if (!isset($_SESSION["LoginUser"]))
     {
         // Not logged in redirect to login page
@@ -158,18 +157,21 @@
         <ul class="navbar-nav mr-auto">
         <li class="nav-item">
             <a class="nav-link" href="activity_list.php">List Activities </a>
-          </li>
-          <li class="nav-item active">
+        </li>
+        <li class="nav-item active">
             <a class="nav-link" href="activity_new.php">New Activity </a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown06" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Reports</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown06">
-              <a class="dropdown-item" href="#">Report 1</a>
-              <a class="dropdown-item" href="#">Report 2</a>
-              <a class="dropdown-item" href="#">Report 3</a>
-            </div>
-          </li>
+        </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown06" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Reports</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown06">
+            <a class="dropdown-item" href="rpt_averagepace.php">Average/Maximum Pace</a>
+            <a class="dropdown-item" href="rpt_heartrate.php">Heart Rates</a>
+            <a class="dropdown-item" href="rpt_within30min.php">Within 30 minutes</a>
+        </div>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="logout.php">Logout </a>
+        </li>            
         </ul>
       </div>
     </nav>
